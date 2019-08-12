@@ -40,7 +40,6 @@ public class Stone : MonoBehaviour
         {
             if(isJump == false)
             {
-                Debug.Log("Up");
                 isJump = true;
                 limitHeight = transform.position.y + height;
             }
