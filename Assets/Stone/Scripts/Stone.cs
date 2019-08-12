@@ -4,20 +4,31 @@ using UnityEngine;
 
 public class Stone : MonoBehaviour
 {
-    Rigidbody rigidbody = null;
+    //이동 속도
     public float moveSpeed = 0;
-    public int jumpPower = 0;
-    public bool isJump = false;
+
+    //
+    float limitHeight = 0f;
+    public float height = 0f;
+
+    bool isJump = false;
+
+    public float jumpRange = 0f;
+    public float fallDownRange = 0f;
+
+    public float upSpeed = 2f;
+    public float downSpeed = 2f;
 
     void Awake()
     {
-        rigidbody = GetComponent<Rigidbody>();
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        Jump();
+        isJump = true;
+        limitHeight = transform.position.y + height;
     }
 
     // Update is called once per frame
@@ -29,10 +40,15 @@ public class Stone : MonoBehaviour
         {
             if(isJump == false)
             {
+                Debug.Log("Up");
                 isJump = true;
-                Jump();
-            }            
+                limitHeight = transform.position.y + height;
+            }
+            
         }
+
+        JumpUp();
+        JumpDown();
     }
 
     void Move()
@@ -40,24 +56,24 @@ public class Stone : MonoBehaviour
         transform.position += new Vector3(moveSpeed, 0f, 0f);
     }
 
-    void Jump()
+    void JumpUp()
     {
-        rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+        if(isJump == true)
+        {
+            transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y + jumpRange, transform.position.z), Time.deltaTime * upSpeed);
+
+            if (transform.position.y >= limitHeight)
+            {
+                isJump = false;
+            }
+        }        
     }
 
-    private void OnTriggerStay(Collider other)
+    void JumpDown()
     {
-        if(other.gameObject.CompareTag("Jump"))
-        {         
-            isJump = false;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Jump"))
-        {            
-            isJump = true;
-        }
+        if (isJump == false)
+        {
+            transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y - fallDownRange, transform.position.z), Time.deltaTime * downSpeed);
+        }            
     }
 }
