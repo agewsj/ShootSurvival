@@ -11,7 +11,7 @@ public class Stone : MonoBehaviour
     float limitHeight = 0f;
     public float height = 0f;
 
-    bool isJump = false;
+    public bool isJump = false;
 
     public float jumpRange = 0f;
     public float fallDownRange = 0f;
@@ -32,7 +32,7 @@ public class Stone : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         Move();
 
